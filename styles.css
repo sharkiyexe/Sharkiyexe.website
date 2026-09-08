@@ -1,0 +1,268 @@
+/* ============================================================
+   GLOBAL RESET & DESKTOP BACKGROUND
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: #1a1a2e; /* fallback */
+}
+
+#desktop {
+  width: 100vw;
+  height: 100vh;
+  background: url('images/Pc\ backgroud\ image.png') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================================
+   DESKTOP ICONS
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+.desktop-icon {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  padding: 8px 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  color: #eee;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+.desktop-icon:hover {
+  background: rgba(255,255,255,0.12);
+}
+.desktop-icon:active {
+  transform: scale(0.92);
+}
+
+/* Position each icon manually (or use grid, but we want PC‑like freedom) */
+.desktop-icon:nth-child(1) { top: 30px; left: 30px; }   /* PC */
+.desktop-icon:nth-child(2) { top: 30px; left: 140px; }  /* SharkiyLand */
+.desktop-icon:nth-child(3) { top: 30px; left: 250px; }  /* News */
+.desktop-icon:nth-child(4) { top: 30px; left: 360px; }  /* About */
+.desktop-icon:nth-child(5) { top: 30px; left: 470px; }  /* Portfolio */
+
+.icon-img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+}
+.icon-label {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.3;
+  max-width: 72px;
+  word-wrap: break-word;
+  background: rgba(0,0,0,0.4);
+  padding: 2px 6px;
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+}
+
+/* ============================================================
+   TASKBAR
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+#taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: rgba(20, 20, 40, 0.85);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid #444;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 6px;
+  color: #ddd;
+  font-size: 14px;
+  z-index: 999;
+}
+
+#start-btn {
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+#start-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+#taskbar-windows {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 0 6px;
+}
+
+.taskbar-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid transparent;
+  color: #ddd;
+  padding: 4px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: background 0.2s, border 0.2s;
+  min-width: 60px;
+  text-align: center;
+}
+.taskbar-btn:hover {
+  background: rgba(255,255,255,0.18);
+}
+.taskbar-btn.minimized {
+  background: rgba(255,255,255,0.04);
+  border-color: #555;
+  color: #999;
+}
+
+#clock {
+  font-size: 14px;
+  padding: 0 12px;
+  color: #ccc;
+  border-left: 1px solid #444;
+}
+
+/* ============================================================
+   WINDOWS
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+.window {
+  position: absolute;
+  min-width: 300px;
+  min-height: 200px;
+  background: #1e1e32;
+  border: 1px solid #3a3a5a;
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: border-radius 0.2s;
+}
+.window.minimized {
+  display: none !important;
+}
+
+.window-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #2a2a4a;
+  padding: 6px 12px;
+  cursor: grab;
+  border-bottom: 1px solid #444;
+  flex-shrink: 0;
+}
+.window-titlebar:active {
+  cursor: grabbing;
+}
+.window-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #eee;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.window-controls {
+  display: flex;
+  gap: 6px;
+  margin-left: 12px;
+}
+.win-btn {
+  background: transparent;
+  border: none;
+  color: #ccc;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.win-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+.win-close:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+.win-max:hover {
+  background: #2ecc71;
+  color: #fff;
+}
+.win-min:hover {
+  background: #f1c40f;
+  color: #000;
+}
+
+.window-content {
+  flex: 1;
+  background: #16162a;
+  overflow: hidden;
+  position: relative;
+}
+.window-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #16162a;
+}
+
+.window-resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.15) 50%);
+  border-bottom-right-radius: 10px;
+}
+
+/* ============================================================
+   START MENU (popup)
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+#start-menu {
+  position: fixed;
+  bottom: 50px;
+  left: 4px;
+  background: #1a1a2e;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 8px 0;
+  min-width: 180px;
+  z-index: 9999;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+}

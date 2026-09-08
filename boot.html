@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starting Windows...</title>
+  <style>
+    /* ============================================================
+       BOOT SCREEN – Windows XP style (image + loading bar)
+       –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #0a0a2a; /* classic dark blue */
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    #boot-container {
+      text-align: center;
+      width: 80%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ============================================================
+       IMAGE / LOGO – put your own image here
+       –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+    #boot-logo {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      margin-bottom: 40px;
+      filter: drop-shadow(0 0 30px rgba(100, 100, 255, 0.3));
+      /* Replace the src below with your own image path */
+    }
+
+    /* Loading bar – XP green style */
+    #loading-bar-bg {
+      width: 100%;
+      max-width: 480px;
+      height: 22px;
+      background: #1a1a3e;
+      border: 2px solid #3a3a6a;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 10px rgba(0,0,255,0.2);
+      margin-bottom: 12px;
+    }
+    #loading-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #2d8f2d, #6fcf6f, #2d8f2d);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite linear;
+      border-radius: 14px;
+      transition: width 0.2s ease;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    #loading-text {
+      font-size: 14px;
+      color: #aaa;
+      letter-spacing: 1px;
+      margin-top: 4px;
+      font-weight: 300;
+    }
+
+    /* Small hint for audio */
+    #click-hint {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #666;
+      opacity: 0.5;
+      display: none; /* hidden by default, shown if audio needs user interaction */
+    }
+  </style>
+</head>
+<body>
+
+<div id="boot-container">
+  <!-- ============================================================
+       IMAGE – replace 'xp-logo.png' with your own image file
+       Supported formats: PNG, JPG, GIF, SVG, etc.
+       Place the image in the same folder as this HTML file,
+       or use a subfolder like 'images/logo.png'
+  ============================================================ -->
+  <img id="boot-logo" src="xp-logo.png" alt="Windows XP" />
+
+  <!-- Loading bar -->
+  <div id="loading-bar-bg">
+    <div id="loading-bar"></div>
+  </div>
+  <div id="loading-text">Loading system files...</div>
+  <div id="click-hint"></div>
+</div>
+
+<audio id="boot-sound" loop>
+  <!-- ============================================================
+        I fucked up when adding the audio and i dont wanna remove so i dont redo all code again.
+  ============================================================ -->
+  <source src="/startup.mp3" type="audio/mpeg" />
+  <source src="/startup.ogg" type="audio/ogg" />
+</audio>
+
+<script>
+  (function() {
+    // ──────────────────────────────────────────────────────────────
+    //  CONFIG – duration in seconds before redirect
+    // ──────────────────────────────────────────────────────────────
+    const BOOT_DURATION = 10; // seconds
+
+    const progressBar = document.getElementById('loading-bar');
+    const loadingText = document.getElementById('loading-text');
+    const audio = document.getElementById('boot-sound');
+    const clickHint = document.getElementById('click-hint');
+
+    // ─── Unlock audio on first user interaction ──────────────────
+    function enableAudioAndStart() {
+      audio.volume = 0.6;
+      audio.play().catch(() => {
+        // If still blocked, keep hint visible
+        clickHint.style.display = 'block';
+      });
+      // Remove listener after first click
+      document.removeEventListener('click', enableAudioAndStart);
+      document.removeEventListener('touchstart', enableAudioAndStart);
+    }
+
+    document.addEventListener('click', enableAudioAndStart);
+    document.addEventListener('touchstart', enableAudioAndStart);
+
+    // Try autoplay
+    audio.volume = 0.6;
+    audio.play().catch(() => {
+      clickHint.style.display = 'block';
+    });
+
+    // ─── Progress bar animation ──────────────────────────────────
+    let startTime = Date.now();
+    const totalTime = BOOT_DURATION * 1000;
+
+    function updateProgress() {
+      const elapsed = Date.now() - startTime;
+      let progress = Math.min(elapsed / totalTime, 1);
+      const percent = Math.round(progress * 100);
+      progressBar.style.width = percent + '%';
+
+      // Update loading text
+      if (percent < 30) loadingText.textContent = 'Loading system files...';
+      else if (percent < 60) loadingText.textContent = 'Starting services...';
+      else if (percent < 90) loadingText.textContent = 'Preparing desktop...';
+      else loadingText.textContent = 'Almost ready...';
+
+      if (progress < 1) {
+        requestAnimationFrame(updateProgress);
+      } else {
+        loadingText.textContent = 'Welcome!';
+        setTimeout(function() {
+          // ──────────────────────────────────────────────────────────
+          //  REDIRECT – change 'desktop.html' to your desktop file
+          //  If your desktop is 'index.html', change it below.
+          // ──────────────────────────────────────────────────────────
+          window.location.href = 'desktop.html';
+        }, 500);
+      }
+    }
+
+    updateProgress();
+
+    // ─── Fallback redirect after BOOT_DURATION + 1 sec ──────────
+    setTimeout(function() {
+      if (window.location.pathname.includes('boot.html')) {
+        window.location.href = 'desktop.html';
+      }
+    }, (BOOT_DURATION + 1) * 1000);
+  })();
+</script>
+</body>
+</html>

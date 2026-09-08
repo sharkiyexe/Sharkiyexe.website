@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Me</title>
+  <!-- Keep the icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       FORCE EVERYTHING WHITE (overrides any external CSS)
+       ============================================================ */
+    /* ALL text = white */
+    * {
+      color: #ffffff !important;
+    }
+
+    /* But icons must stay purple (except on hover) */
+    .fas, .fab, .far, .fa, .icon i, 
+    .fa-star, .fa-heart, .fa-envelope, .fa-map-pin, .fa-clock, .fa-brain,
+    .link-card .icon i {
+      color: var(--purple-primary) !important;
+    }
+    /* On hover, icons turn white */
+    .link-card:hover .icon i {
+      color: #ffffff !important;
+    }
+    /* Heart stays purple */
+    .fa-heart {
+      color: var(--purple-primary) !important;
+    }
+    /* Arrow icon in link cards */
+    .link-card .arrow i {
+      color: #ffffff !important;
+    }
+    .link-card:hover .arrow i {
+      color: var(--purple-primary) !important;
+    }
+
+    /* ============================================================
+       PAGE SWITCHING & LAYOUT
+       ============================================================ */
+    :root {
+      --bg-primary: #0d0d0d;
+      --bg-secondary: #1a1a1a;
+      --bg-card: #222;
+      --purple-primary: #9b4dff;
+      --purple-secondary: #7b2fbe;
+      --radius: 16px;
+    }
+
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+      animation: fadeUp 0.3s ease;
+    }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    body {
+      padding: 0;
+      background: var(--bg-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .container {
+      max-width: 780px;
+      width: 100%;
+      margin: 20px auto;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 40px 35px 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(155, 77, 255, 0.15);
+      border: 1px solid rgba(155, 77, 255, 0.10);
+    }
+
+    /* ── Tabs ── */
+    .nav-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 35px;
+      border-bottom: 1px solid rgba(155, 77, 255, 0.20);
+      padding-bottom: 16px;
+    }
+    .nav-link {
+      background: transparent;
+      border: none;
+      font-size: 1.05rem;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: inline-block;
+      color: #cccccc !important; /* slightly dim for inactive */
+    }
+    .nav-link:not(.active):hover {
+      background: rgba(155, 77, 255, 0.15);
+      border-color: rgba(155, 77, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(155, 77, 255, 0.10);
+      color: #ffffff !important;
+    }
+    .nav-link.active {
+      background: var(--purple-primary);
+      color: #ffffff !important;
+      box-shadow: 0 4px 24px rgba(155, 77, 255, 0.45), inset 0 0 12px rgba(255,255,255,0.08);
+      transform: scale(1.02);
+      text-shadow: 0 0 20px rgba(155, 77, 255, 0.9), 0 0 40px rgba(155, 77, 255, 0.5);
+    }
+    .nav-link.active::after {
+      content: " ▼";
+      font-size: 0.7rem;
+      opacity: 0.9;
+      margin-left: 4px;
+    }
+
+    /* ── About page ── */
+    .about-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple-primary), var(--purple-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      box-shadow: 0 0 0 3px rgba(155, 77, 255, 0.3), 0 8px 30px rgba(155, 77, 255, 0.20);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .about-title h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-shadow: 0 0 20px rgba(155, 77, 255, 0.8),
+                   0 0 40px rgba(155, 77, 255, 0.4),
+                   0 0 80px rgba(155, 77, 255, 0.2);
+    }
+    .tagline {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 4px;
+      display: block;
+      text-shadow: 0 0 16px rgba(155, 77, 255, 0.5),
+                   0 0 32px rgba(155, 77, 255, 0.2);
+    }
+    .about-bio {
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 18px 0 10px;
+      background: rgba(155, 77, 255, 0.04);
+      padding: 20px 22px;
+      border-radius: 12px;
+      border-left: 3px solid var(--purple-primary);
+    }
+    .about-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 32px;
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(155, 77, 255, 0.12);
+    }
+    .about-details span {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+
+    /* ── Links page ── */
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: var(--bg-card);
+      padding: 18px 24px;
+      border-radius: 14px;
+      text-decoration: none;
+      border: 1px solid rgba(155, 77, 255, 0.10);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .link-card:hover {
+      transform: translateY(-3px);
+      background: #2a1a3a;
+      border-color: var(--purple-primary);
+      box-shadow: 0 8px 30px rgba(155, 77, 255, 0.15);
+    }
+    .link-card .icon {
+      font-size: 2rem;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(155, 77, 255, 0.12);
+      flex-shrink: 0;
+      transition: all 0.25s ease;
+    }
+    .link-card:hover .icon {
+      background: var(--purple-primary);
+      box-shadow: 0 0 24px rgba(155, 77, 255, 0.30);
+    }
+    .link-card .info {
+      flex: 1;
+    }
+    .link-card .info .platform {
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: block;
+    }
+    .link-card .info .handle {
+      font-size: 0.9rem;
+    }
+    .link-card .arrow {
+      font-size: 1.2rem;
+      transition: all 0.25s ease;
+    }
+    .link-card:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 35px;
+      text-align: center;
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(155, 77, 255, 0.08);
+      padding-top: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 500px) {
+      .container {
+        padding: 24px 18px 20px;
+        margin: 10px auto;
+      }
+      .about-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .avatar {
+        width: 80px;
+        height: 80px;
+      }
+      .about-title h1 {
+        font-size: 1.6rem;
+      }
+      .nav-tabs {
+        justify-content: center;
+        gap: 8px;
+      }
+      .nav-link {
+        font-size: 0.95rem;
+        padding: 6px 16px;
+      }
+      .link-card {
+        padding: 14px 18px;
+      }
+      .link-card .icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===== TABS ===== -->
+  <nav class="nav-tabs">
+    <a class="nav-link active" data-tab="about-tab">
+      <i class="fas fa-user" style="margin-right: 8px;"></i> About
+    </a>
+    <a class="nav-link" data-tab="links-tab">
+      <i class="fas fa-link" style="margin-right: 8px;"></i> Links
+    </a>
+  </nav>
+
+  <!-- ===== ABOUT PAGE ===== -->
+  <section class="page active" id="about-tab">
+    <div class="about-header">
+      <div class="avatar">
+        <img src="icons/Sharkiy Land.png" alt="Sharkiy Land 2v" />
+      </div>
+      <div class="about-title">
+        <h1>Goth Maker</h1>
+        <span class="tagline"><i class="fas fa-star" style="margin-right: 6px;"></i>Streamer · Creator · 3D modeling</span>
+      </div>
+    </div>
+
+    <div class="about-bio">
+      <strong>Hey there!</strong> I'm Sharkiy, though you might also know me as Goth Maker. I'm a native Arabic speaker, but all of my streams and content are in English. I do 3D modeling, coding, and streaming over on Twitch. I built this website myself so I wouldn't have to pay for a fancy shitty website monthly.
+      <br><br>
+      anyway thank you for coming by goodbye for now!
+    </div>
+
+    <div class="about-details">
+      <span><i class="fas fa-map-pin"></i> Based in · Blender</span>
+      <span><i class="fas fa-clock"></i> Streams · between 4pm or 7pm cst (NOT DALY)</span>
+      <span><i class="fas fa-brain" style="color: #ff6b9d;"></i> Vibes · brainrot</span>
+    </div>
+  </section>
+
+  <!-- ===== LINKS PAGE ===== -->
+  <section class="page" id="links-tab">
+    <h2 style="font-weight: 600; font-size: 1.4rem; margin-bottom: 6px;">
+      <i class="fas fa-hashtag" style="color: var(--purple-primary); margin-right: 10px;"></i>Connect with me
+    </h2>
+    <p style="margin-bottom: 22px; font-size: 0.95rem;">
+      Click any card to visit my socials
+    </p>
+
+    <div class="links-grid">
+      <a href="https://twitch.tv/sharkiyexe" target="_blank" rel="noopener noreferrer" class="link-card">
+        <span class="icon"><i class="fab fa-twitch"></i></span>
+        <span class="info">
+          <span class="platform">Twitch</span>
+          <span class="handle">@sharkiyexe</span>
+        </span>
+        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+      </a>
+
+      <a href="https://twitter.com/sharkiyexe" target="_blank" rel="noopener noreferrer" class="link-card">
+        <span class="icon"><i class="fab fa-twitter"></i></span>
+        <span class="info">
+          <span class="platform">Twitter / X</span>
+          <span class="handle">@sharkiyexe</span>
+        </span>
+        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+      </a>
+
+      <a href="https://instagram.com/sharkiyexe" target="_blank" rel="noopener noreferrer" class="link-card">
+        <span class="icon"><i class="fab fa-instagram"></i></span>
+        <span class="info">
+          <span class="platform">Instagram</span>
+          <span class="handle">@sharkiyexe</span>
+        </span>
+        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+      </a>
+
+      <!-- ADD MORE LINKS HERE (copy one block above) -->
+    </div>
+
+    <div style="margin-top: 24px; font-size: 0.9rem; text-align: center; border-top: 1px solid rgba(155,77,255,0.08); padding-top: 20px;">
+      <i class="fas fa-envelope" style="color: var(--purple-primary); margin-right: 8px;"></i>
+      Sharkiy.art@gmail.com
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="footer">
+    Built by your truly <i class="fas fa-heart" style="color: var(--purple-primary);"></i>
+  </div>
+
+</div>
+
+<!-- ===== TAB SWITCHING ===== -->
+<script>
+  const tabs = document.querySelectorAll('.nav-link[data-tab]');
+  const pages = {
+    about: document.getElementById('about-tab'),
+    links: document.getElementById('links-tab')
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+      tabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      const tabId = this.dataset.tab;
+      if (tabId === 'about-tab') pages.about.classList.add('active');
+      else if (tabId === 'links-tab') pages.links.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

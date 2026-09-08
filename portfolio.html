@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Work & Reviews</title>
+  <!-- Link to your global styles -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       PORTFOLIO / REVIEWS – ALL TEXT = WHITE
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ── Force ALL text to white ── */
+    body, .portfolio-container, .section-header, .card, .card-body,
+    .card-title, .card-sub, .card-meta, .card-review-text,
+    .tab-btn, .tab-content, p, h2, div, span, .stars {
+      color: #ffffff !important;
+    }
+
+    /* Icons stay purple (for contrast) */
+    .fas, .fab, .far, .fa, i:not(.fa-star):not(.fa-heart) {
+      color: var(--purple-primary) !important;
+    }
+    /* But some icons like stars should stay yellow */
+    .fa-star {
+      color: #fbbf24 !important;
+    }
+    .fa-heart {
+      color: var(--purple-primary) !important;
+    }
+    /* Arrow icons in tabs? */
+    .tab-btn i {
+      color: var(--purple-primary) !important;
+    }
+    .tab-btn.active i {
+      color: #ffffff !important;
+    }
+
+    body {
+      background: var(--bg-primary);
+      font-family: 'Inter', sans-serif;
+      padding: 30px 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .portfolio-container {
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    /* ── Tab Navigation ── */
+    .tab-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(124, 58, 237, 0.20);
+      padding-bottom: 16px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 8px 24px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: 'Inter', sans-serif;
+      color: #d4c8e0 !important; /* slightly muted white for inactive */
+    }
+    .tab-btn:hover {
+      background: rgba(124, 58, 237, 0.12);
+      color: #ffffff !important;
+    }
+    .tab-btn.active {
+      background: var(--purple-primary);
+      color: #ffffff !important;
+      box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35);
+    }
+    .tab-btn i {
+      margin-right: 8px;
+      color: var(--purple-primary) !important;
+    }
+    .tab-btn.active i {
+      color: #ffffff !important;
+    }
+
+    /* ── Tab Content ── */
+    .tab-content {
+      display: none;
+      animation: fadeUp 0.3s ease;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Header (text above pictures) ── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .section-header h2 i {
+      color: var(--purple-primary) !important;
+      margin-right: 10px;
+    }
+    .section-header p {
+      font-size: 1.05rem;
+      color: #e0d8e8 !important;
+    }
+
+    /* ── Grid (pictures below) ── */
+    .grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+    /* ── Card ── */
+    .card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(124, 58, 237, 0.10);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(124, 58, 237, 0.15);
+      border-color: var(--purple-primary);
+    }
+
+    .card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #e8dff0;
+      display: block;
+      cursor: pointer; /* makes it obvious it's clickable */
+      transition: filter 0.2s ease;
+    }
+    .card-image:hover {
+      filter: brightness(1.05);
+    }
+
+    .card-body {
+      padding: 16px 18px 20px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .card-sub {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-sub i {
+      color: var(--purple-primary) !important;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(124, 58, 237, 0.08);
+    }
+    .card-meta span i {
+      color: var(--purple-primary) !important;
+      width: 16px;
+      margin-right: 2px;
+    }
+
+    .card-review-text {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      background: rgba(124, 58, 237, 0.04);
+      padding: 10px 14px;
+      border-radius: 10px;
+      border-left: 3px solid var(--purple-primary);
+    }
+    .card-review-text i {
+      color: var(--purple-primary) !important;
+      margin-right: 6px;
+    }
+
+    /* ── Stars for reviews ── */
+    .stars {
+      color: #fbbf24 !important;
+      letter-spacing: 2px;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    /* ============================================================
+       LIGHTBOX / ZOOM ON CLICK
+       ============================================================ */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      animation: lightboxFade 0.25s ease;
+    }
+    .lightbox.show {
+      display: flex;
+    }
+
+    @keyframes lightboxFade {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 85%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 8px 60px rgba(0, 0, 0, 0.9);
+      border: 2px solid rgba(124, 58, 237, 0.3);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 24px;
+      right: 36px;
+      color: #ffffff;
+      font-size: 44px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: transform 0.2s ease, color 0.2s ease;
+      z-index: 10000;
+      text-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+    .lightbox-close:hover {
+      transform: scale(1.15);
+      color: var(--purple-primary);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .section-header h2 {
+        font-size: 1.5rem;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .card-image {
+        height: 160px;
+      }
+      .tab-btn {
+        font-size: 0.95rem;
+        padding: 6px 16px;
+      }
+      .lightbox-close {
+        top: 16px;
+        right: 20px;
+        font-size: 32px;
+      }
+      .lightbox-content {
+        max-width: 95%;
+        max-height: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="portfolio-container">
+
+  <!-- ===== TAB NAVIGATION ===== -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="portfolio">
+      <i class="fas fa-briefcase"></i> My Work
+    </button>
+    <button class="tab-btn" data-tab="reviews">
+      <i class="fas fa-star"></i> Reviews
+    </button>
+  </div>
+
+  <!-- ============================================================
+         I got lazy to PUT ALL THE .CSS in the files so random shit go!
+  ============================================================ -->
+  <div class="tab-content active" id="portfolio-tab">
+
+    <div class="section-header">
+      <h2><i class="fas fa-palette"></i> My Avatars</h2>
+      <p>Artwork I've created Some of my work were old and other are new and some I sold off and others are FOR MY OWN USE!!!!!... yea :3</p>
+      <p>----------------------------------------------------------</p>
+      <p> I put all of my picture from new to old. So the more you go down the old the avi get and the worst it get. ;-;</p>
+      <p>------------------------------------------------------------</p>
+      <p> Made for myself= i mean it don't need to be explained</p>
+      <p>------------------------------------------------------------</p>
+      <p> Made for someone else= was a commission</p>
+      <p>------------------------------------------------------------</p>
+      <p> Sold off= I was made to be only for me. but after a while I sold it off</p>
+      <p>------------------------------------------------------------</p>
+      <p>🕕= Time spent creating the avatar. and another no need explaining</p>
+    </div>
+
+    <div class="grid">
+      <!-- ─── PORTFOLIO CARD 1 ─── -->
+      <div class="card">
+        <img class="card-image" src="avatars/Daiwa scarlet 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Daiwa Scarlet</div>
+          <div class="card-sub"><i class="fas fa-user"></i> Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i> NONE</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i> 12 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PORTFOLIO CARD 2 ─── -->
+      <div class="card">
+        <img class="card-image" src="avatars/haru 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Haru Urara</div>
+          <div class="card-sub"><i class="fas fa-user"></i> Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i> NONE</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i> 20 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PORTFOLIO CARD 3 ─── -->
+      <div class="card">
+        <img class="card-image" src="avatars/tomamao 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">tamamo cross</div>
+          <div class="card-sub"><i class="fas fa-user"></i> Made for someone else</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i> $125</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i> 3 days "being lazy but real talk took me 7h"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PORTFOLIO CARD 4 ─── -->
+      <div class="card">
+        <img class="card-image" src="avatars/asha 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Asha "rp model"</div>
+          <div class="card-sub"><i class="fas fa-user"></i> Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>NONE</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i>4 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PORTFOLIO CARD 5 ─── -->
+      <div class="card">
+        <img class="card-image" src="avatars/gigi 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Gigi hololive</div>
+          <div class="card-sub"><i class="fas fa-user"></i> Sold off </div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i> $85</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i>4 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PORTFOLIO CARD 6 ─── -->
+      <div class="card">
+        <img class="card-image" src="avatars/gura-v2-2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Gura v2</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Sold off</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i> $125</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i>1 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/makima 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Makima</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>NONE</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i>8 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/power 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Power</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>NONE</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i>6 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/saba 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Saba</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Sold off</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i> $125</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i>1 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/shiori-v2-2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Shiori v2</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Sold off</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i> $125</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i>9 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/train girl 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Train Girl</div>
+          <div class="card-sub"><i class="fas fa-user"></i>made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>none</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i>3 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/train girl sis 2026.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Train Girl Sis</div>
+          <div class="card-sub"><i class="fas fa-user"></i>made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>none</span>
+            <span><i class="fas fa-calendar"></i>2026</span>
+            <span><i class="fas fa-clock"></i>5 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/toga 2025.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Toga</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for someone else</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i> $between 100 to 200 forgor</span>
+            <span><i class="fas fa-calendar"></i>2025</span>
+            <span><i class="fas fa-clock"></i>2 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/robo 2025.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">robo from fortnite</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>none</span>
+            <span><i class="fas fa-calendar"></i>2025</span>
+            <span><i class="fas fa-clock"></i>4 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/nanachi v2-2025.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Nanachi v2</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>none</span>
+            <span><i class="fas fa-calendar"></i>2025</span>
+            <span><i class="fas fa-clock"></i>5 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/jannah 2025.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Jannah "my OC"</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>none</span>
+            <span><i class="fas fa-calendar"></i>2025</span>
+            <span><i class="fas fa-clock"></i>7 hours</span>
+          </div>
+        </div>
+      </div>
+
+       <div class="card">
+        <img class="card-image" src="avatars/jannah 2025-2.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Jannah "my OC"</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>none</span>
+            <span><i class="fas fa-calendar"></i>2025</span>
+            <span><i class="fas fa-clock"></i>5 hours</span>
+          </div>
+        </div>
+      </div>
+
+       <div class="card">
+        <img class="card-image" src="avatars/fuwawa 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Fuwawa</div>
+          <div class="card-sub"><i class="fas fa-user"></i>sold off</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>$60</span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i>13 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/mococo 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Mococo</div>
+          <div class="card-sub"><i class="fas fa-user"></i>sold off</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>$60</span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i>5 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/jannah 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Jannah "my OC"</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>None</span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i>forgot</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/korone 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Korone</div>
+          <div class="card-sub"><i class="fas fa-user"></i>made for someone</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>forgot</span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i>forgot</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/mimi sentry 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Mimi Sentry</div>
+          <div class="card-sub"><i class="fas fa-user"></i>sold off</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>forgot</span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i>5 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/Nanachi 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Nanachi</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for someone else</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>300$</span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i>1 days</span>
+          </div>
+        </div>
+      </div>
+
+       <div class="card">
+        <img class="card-image" src="avatars/Okayu and komono tiger 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Okayu and Komono Tiger</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Made for someone else</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>both together around 130$</span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i>7 days</span>
+          </div>
+        </div>
+      </div>
+
+       <div class="card">
+        <img class="card-image" src="avatars/ollie 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Ollie</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Never sold "ripped body was used wihtout me knowing until its too late"</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>None</span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i> 8 days</span>
+          </div>
+        </div>
+      </div>
+
+       <div class="card">
+        <img class="card-image" src="avatars/pekomama 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Pekomama</div>
+          <div class="card-sub"><i class="fas fa-user"></i>sold off</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>between 60 to 100 </span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i> 2 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/toga 2024.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Toga</div>
+          <div class="card-sub"><i class="fas fa-user"></i>made for myself</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>none</span>
+            <span><i class="fas fa-calendar"></i>2024</span>
+            <span><i class="fas fa-clock"></i> 7 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="avatars/gura 2023.png" alt="Commission" />
+        <div class="card-body">
+          <div class="card-title">Gura</div>
+          <div class="card-sub"><i class="fas fa-user"></i>sold off "But ripped body was used wihtout me knowing until its too late"</div>
+          <div class="card-meta">
+            <span><i class="fas fa-tag"></i>60$</span>
+            <span><i class="fas fa-calendar"></i>2023</span>
+            <span><i class="fas fa-clock"></i> 10 days</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ➕ Add more cards by copying the <div class="card"> block above -->
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TAB 2: REVIEWS
+  ============================================================ -->
+  <div class="tab-content" id="reviews-tab">
+
+    <div class="section-header">
+      <h2><i class="fas fa-comment-dots"></i> Client Reviews</h2>
+      <p>So here word for word what I asked them for the review. "i want u in one text to review my commission/Model u got from me and from 1 to 10 how much u will give me rating and be 100% honest so i can put it on my website again type everything in one text at the end put the rating"</p>
+      <p>----------------------------------------------------------</p>
+      <p>Custom made = they asked for their own design avatar.</p>
+      <p>----------------------------------------------------------</p>
+      <p>optimizing = they asked for optimization of their existing model.</p>
+      <p>----------------------------------------------------------</p>
+      <p>bought my model= they asked to purchase my existing model.</p>
+      <p>----------------------------------------------------------</p>
+      <P>other= they asked for something else.</P>
+      <p>----------------------------------------------------------</p>
+    </div>
+
+    <div class="grid">
+      <!-- ─── REVIEW CARD 1 ─── -->
+      <div class="card">
+        <img class="card-image" src="reviews/1image.png" alt="Review" />
+        <div class="card-body">
+          <div class="card-title">⭐ 10/10</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Aurora Sinko</div>
+          <div class="card-meta">
+            <span><i class="fas fa-paint-brush"></i>Optimizing</span>
+          </div>
+          <div class="card-review-text">
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── REVIEW CARD 2 ─── -->
+      <div class="card">
+        <img class="card-image" src="reviews/2image.png" alt="Review" />
+        <div class="card-body">
+          <div class="card-title">⭐ 9/10</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Frolic</div>
+          <div class="card-meta">
+            <span><i class="fas fa-paint-brush"></i>Optimizing</span>
+          </div>
+          <div class="card-review-text">
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── REVIEW CARD 3 ─── -->
+      <div class="card">
+        <img class="card-image" src="reviews/3image.png" alt="Review" />
+        <div class="card-body">
+          <div class="card-title">⭐ 8/10</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Rondcore</div>
+          <div class="card-meta">
+            <span><i class="fas fa-paint-brush"></i>bought my model/other</span>
+          </div>
+          <div class="card-review-text">
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── REVIEW CARD 4 ─── -->
+      <div class="card">
+        <img class="card-image" src="reviews/4image.png" alt="Review" />
+        <div class="card-body">
+          <div class="card-title">⭐ 8/10</div>
+          <div class="card-sub"><i class="fas fa-user"></i>StoryBook</div>
+          <div class="card-meta">
+            <span><i class="fas fa-paint-brush"></i>Custom made</span>
+          </div>
+          <div class="card-review-text">
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── REVIEW CARD 5 ─── -->
+      <div class="card">
+        <img class="card-image" src="reviews/5image.png" alt="Review" />
+        <div class="card-body">
+          <div class="card-title">⭐ 7/10</div>
+          <div class="card-sub"><i class="fas fa-user"></i>BladeBun</div>
+          <div class="card-meta">
+            <span><i class="fas fa-paint-brush"></i>bought my model</span>
+          </div>
+          <div class="card-review-text">
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── REVIEW CARD 6 ─── -->
+      <div class="card">
+        <img class="card-image" src="reviews/6image.png" alt="Review" />
+        <div class="card-body">
+          <div class="card-title">⭐ 10/10</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Zenni Stardust</div>
+          <div class="card-meta">
+            <span><i class="fas fa-paint-brush"></i>bought my model/Custom made/others</span>
+          </div>
+          <div class="card-review-text">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="reviews/7image.png" alt="Review" />
+        <div class="card-body">
+          <div class="card-title">⭐ 9/10</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Chillycarlson</div>
+          <div class="card-meta">
+            <span><i class="fas fa-paint-brush"></i>bought my model/others</span>
+          </div>
+          <div class="card-review-text">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="reviews/8image.png" alt="Review" />
+        <div class="card-body">
+          <div class="card-title">⭐ ?/10</div>
+          <div class="card-sub"><i class="fas fa-user"></i>Iveary</div>
+          <div class="card-meta">
+            <span><i class="fas fa-paint-brush"></i>Custom made</span>
+          </div>
+          <div class="card-review-text">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="card-image" src="reviews/9image.png" alt="Review" />
+        <div class="card-body">
+          <div class="card-title">⭐ 10/10</div>
+          <div class="card-sub"><i class="fas fa-user"></i>ItsDeadLocks</div>
+          <div class="card-meta">
+            <span><i class="fas fa-paint-brush"></i>Custom made</span>
+          </div>
+          <div class="card-review-text">
+          </div>
+        </div>
+      </div>
+      <!-- ➕ Add more review cards by copying the <div class="card"> block above -->
+    </div>
+</div>
+
+<!-- ============================================================
+     LIGHTBOX HTML (click image to zoom)
+     ============================================================ -->
+<div id="lightbox" class="lightbox">
+  <span class="lightbox-close">&times;</span>
+  <img class="lightbox-content" id="lightbox-img" src="" alt="Zoomed image" />
+</div>
+
+<!-- ============================================================
+     TAB SWITCHING & LIGHTBOX JAVASCRIPT
+     ============================================================ -->
+<script>
+  // ─── Tab Switching ───
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabContents = {
+    portfolio: document.getElementById('portfolio-tab'),
+    reviews: document.getElementById('reviews-tab')
+  };
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      tabButtons.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      Object.values(tabContents).forEach(content => content.classList.remove('active'));
+      const tabId = this.dataset.tab;
+      if (tabId === 'portfolio') tabContents.portfolio.classList.add('active');
+      else if (tabId === 'reviews') tabContents.reviews.classList.add('active');
+    });
+  });
+
+  // ─── Lightbox (click to zoom) ───
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const closeBtn = document.querySelector('.lightbox-close');
+
+  // Open lightbox when any .card-image is clicked
+  document.querySelectorAll('.card-image').forEach(img => {
+    img.addEventListener('click', function(e) {
+      e.stopPropagation();
+      lightboxImg.src = this.src;
+      lightbox.classList.add('show'); // using class instead of display for smoothness
+    });
+  });
+
+  // Close functions
+  function closeLightbox() {
+    lightbox.classList.remove('show');
+    // optionally clear src to free memory
+    // lightboxImg.src = '';
+  }
+
+  closeBtn.addEventListener('click', closeLightbox);
+
+  // Click outside the image (on the dark background) to close
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeLightbox();
+    }
+  });
+
+  // Press ESC key to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('show')) {
+      closeLightbox();
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>This is your PC</title>
+  <!-- You can link a separate CSS here if you want, but we keep it simple -->
+  <style>
+    /* ============================================================
+       PC APP STYLES (edit colors here if you like)
+       –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    body {
+      background: #12121f;
+      color: #ddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #pc-container {
+      background: #1e1e34;
+      border-radius: 12px;
+      padding: 30px 40px;
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+      text-align: center;
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #9f9fdf;
+    }
+    #lock-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+    #lock-screen input {
+      padding: 10px 16px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #2a2a44;
+      color: #eee;
+      font-size: 16px;
+      width: 100%;
+      outline: none;
+    }
+    #lock-screen input:focus {
+      border-color: #6f6fcf;
+    }
+    #lock-screen button {
+      padding: 10px 28px;
+      background: #4a4a8a;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #lock-screen button:hover {
+      background: #5a5aaa;
+    }
+    #lock-error {
+      color: #ff6b6b;
+      font-size: 14px;
+      min-height: 20px;
+    }
+    #pc-content {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+    }
+    #pc-content p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #bbb;
+    }
+    #pc-content .highlight {
+      color: #b3b3ff;
+      font-weight: 600;
+    }
+    #pc-content .small-note {
+      font-size: 12px;
+      color: #888;
+      border-top: 1px solid #333;
+      padding-top: 12px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+<div id="pc-container">
+  <h1>🖥️ This is your PC</h1>
+
+  <!-- LOCK SCREEN -->
+  <div id="lock-screen">
+    <p style="color:#aaa; font-size:14px;">Enter password to unlock</p>
+    <input type="password" id="password-input" placeholder="Password" autofocus />
+    <button id="unlock-btn">Unlock</button>
+    <div id="lock-error"></div>
+  </div>
+
+  <!-- CONTENT (hidden until unlocked) -->
+  <div id="pc-content">
+    <img src="Images/lol.png" alt="thumb1" />
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  PASSWORD LOGIC – edit the password below
+  // ============================================================
+  const CORRECT_PASSWORD = "67underscore"; // <-- change this
+
+  const lockScreen = document.getElementById('lock-screen');
+  const pcContent = document.getElementById('pc-content');
+  const passwordInput = document.getElementById('password-input');
+  const unlockBtn = document.getElementById('unlock-btn');
+  const errorEl = document.getElementById('lock-error');
+
+  function tryUnlock() {
+    const entered = passwordInput.value.trim();
+    if (entered === CORRECT_PASSWORD) {
+      lockScreen.style.display = 'none';
+      pcContent.style.display = 'flex';
+      errorEl.textContent = '';
+    } else {
+      errorEl.textContent = '❌ Incorrect password. Try again.';
+      passwordInput.value = '';
+      passwordInput.focus();
+    }
+  }
+
+  unlockBtn.addEventListener('click', tryUnlock);
+  passwordInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryUnlock();
+  });
+</script>
+</body>
+</html>

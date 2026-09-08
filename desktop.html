@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My PC Desktop</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+
+<div id="desktop">
+
+  <!-- ============================================================
+       DESKTOP ICONS – Edit this section to add/remove/change icons
+       Each icon: .desktop-icon
+       - data-app:   unique name (must match an entry in APP_CONFIG below)
+       - .icon-img:  path to your icon image (change src)
+       - .icon-label: text shown under the icon
+  ============================================================ -->
+  <div class="desktop-icon" data-app="pc">
+    <img class="icon-img" src="icons/pc.png" alt="This is your PC" />
+    <span class="icon-label">This is your PC</span>
+  </div>
+
+  <div class="desktop-icon" data-app="sharkiyland">
+    <img class="icon-img" src="icons/Sharkiy Land.png" alt="SharkiyLand" />
+    <span class="icon-label">SharkiyLand</span>
+  </div>
+
+  <div class="desktop-icon" data-app="news">
+    <img class="icon-img" src="icons/news.png" alt="News" />
+    <span class="icon-label">News</span>
+  </div>
+
+  <div class="desktop-icon" data-app="about">
+    <img class="icon-img" src="icons/about.png" alt="About Me" />
+    <span class="icon-label">About Me</span>
+  </div>
+  
+  <div class="desktop-icon" data-app="portfolio">
+    <img class="icon-img" src="icons/My Work & Reviews.png" alt="Portfolio" />
+    <span class="icon-label">My Work & Reviews</span>
+  </div>
+  <!-- ============================================================
+     STARTUP SOUND – plays only once when desktop loads
+     –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<audio id="startup-sound" preload="auto">
+  <!-- CHANGE THE SRC TO YOUR OWN MP3 FILE -->
+  <source src="sounds/startup.mp3" type="audio/mpeg" />
+  <!-- You can add other formats like .ogg if needed -->
+</audio>
+
+<script>
+  (function() {
+    // ─── Config ──────────────────────────────────────────────────
+    // Change this to the path of your MP3 file
+    const SOUND_FILE = "sounds/startup.mp3";
+
+    // ─── Check if we already played this sound before ──────────
+    const hasPlayed = localStorage.getItem('desktop_startup_played');
+
+    if (!hasPlayed) {
+      // Get the audio element
+      const audio = document.getElementById('startup-sound');
+      if (audio) {
+        audio.volume = 0.6; // adjust volume (0.0 – 1.0)
+
+        // Try to play immediately (might be blocked by browser)
+        const playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Autoplay blocked – wait for a click on the page
+            const playOnInteraction = () => {
+              audio.play().catch(() => {});
+              document.removeEventListener('click', playOnInteraction);
+              document.removeEventListener('touchstart', playOnInteraction);
+            };
+            document.addEventListener('click', playOnInteraction);
+            document.addEventListener('touchstart', playOnInteraction);
+          });
+        }
+
+        // Mark as played so it never runs again
+        localStorage.setItem('desktop_startup_played', 'true');
+      }
+    }
+  })();
+</script>
+<!-- ===== END STARTUP SOUND ===== -->
+
+  <!-- ===== END DESKTOP ICONS ===== -->
+
+  <!-- ============================================================
+       TASKBAR (bottom)
+  ============================================================ -->
+  <div id="taskbar">
+    <div id="start-btn">🪟</div>
+    <div id="taskbar-windows"></div>
+    <div id="clock"></div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT – Window Manager & Desktop logic
+     –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<script>
+  // ────────────────────────────────────────────────────────────────
+  //   APP CONFIG – Edit this to add/remove apps
+  //   Each app: { id, title, url, icon }
+  //   - id:    unique identifier (matches data-app on icon)
+  //   - title: shown in window title bar
+  //   - url:   path to the app's HTML file
+  //   - icon:  (optional) icon shown in taskbar
+  // ────────────────────────────────────────────────────────────────
+  const APP_CONFIG = {
+    pc: {
+      id: 'pc',
+      title: 'This is your PC',
+      url: 'pc.html',
+      icon: 'icons/pc.png'
+    },
+    sharkiyland: {
+      id: 'sharkiyland',
+      title: 'SharkiyLand',
+      url: 'sharkiyland.html',
+      icon: 'icons/sharkiy.png'
+    },
+    news: {
+      id: 'news',
+      title: 'News',
+      url: 'news.html',
+      icon: 'icons/news.png'
+    },
+    about: {
+      id: 'about',
+      title: 'About Me',
+      url: 'about.html',
+      icon: 'icons/about.png'
+     },
+  portfolio: {
+    id: 'portfolio',
+    title: 'Portfolio & Reviews',
+    url: 'portfolio.html',
+    icon: 'icons/portfolio.png'   
+  }
+  };
+  // ────────────────────────────────────────────────────────────────
+
+  // State
+  const openWindows = {};
+  let windowZIndex = 100;
+  let nextWindowId = 0;
+
+  // DOM refs
+  const desktop = document.getElementById('desktop');
+  const taskbarWindows = document.getElementById('taskbar-windows');
+  const clockEl = document.getElementById('clock');
+
+  // ─── Clock ──────────────────────────────────────────────────────
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    clockEl.textContent = h + ':' + m;
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // ─── Icon click handler ────────────────────────────────────────
+  document.querySelectorAll('.desktop-icon').forEach(iconEl => {
+    iconEl.addEventListener('dblclick', () => {
+      const appId = iconEl.dataset.app;
+      if (appId && APP_CONFIG[appId]) {
+        openApp(appId);
+      }
+    });
+  });
+
+  // ─── Open an app (creates a window) ───────────────────────────
+  function openApp(appId) {
+    if (openWindows[appId]) {
+      bringToFront(openWindows[appId]);
+      return;
+    }
+    const config = APP_CONFIG[appId];
+    if (!config) return;
+    const win = createWindow(config);
+    openWindows[appId] = win;
+    document.body.appendChild(win.element);
+    const iframe = win.element.querySelector('.window-content iframe');
+    iframe.src = config.url;
+    addTaskbarItem(appId, config.title);
+    bringToFront(win);
+  }
+
+  // ─── Create a window DOM element ──────────────────────────────
+  function createWindow(config) {
+    const winId = 'win-' + (++nextWindowId);
+    const el = document.createElement('div');
+    el.className = 'window';
+    el.dataset.winId = winId;
+    el.style.zIndex = ++windowZIndex;
+
+    el.innerHTML = `
+      <div class="window-titlebar">
+        <span class="window-title">${config.title}</span>
+        <div class="window-controls">
+          <button class="win-btn win-min" title="Minimize">─</button>
+          <button class="win-btn win-max" title="Maximize">☐</button>
+          <button class="win-btn win-close" title="Close">✕</button>
+        </div>
+      </div>
+      <div class="window-content">
+        <iframe src="about:blank" frameborder="0"></iframe>
+      </div>
+      <div class="window-resize-handle"></div>
+    `;
+
+    const state = {
+      element: el,
+      id: winId,
+      appId: config.id,
+      title: config.title,
+      isMaximized: false,
+      prevRect: null,
+      iframe: el.querySelector('.window-content iframe'),
+      titlebar: el.querySelector('.window-titlebar'),
+      closeBtn: el.querySelector('.win-close'),
+      minBtn: el.querySelector('.win-min'),
+      maxBtn: el.querySelector('.win-max'),
+      resizeHandle: el.querySelector('.window-resize-handle'),
+    };
+
+    // Close
+    state.closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeWindow(state.appId);
+    });
+
+    // Minimize
+    state.minBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      minimizeWindow(state.appId);
+    });
+
+    // Maximize
+    state.maxBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMaximize(state);
+    });
+    state.titlebar.addEventListener('dblclick', () => toggleMaximize(state));
+
+    // Dragging
+    let dragData = null;
+    state.titlebar.addEventListener('mousedown', (e) => {
+      if (state.isMaximized) return;
+      if (e.target.closest('.window-controls')) return;
+      dragData = {
+        win: state,
+        startX: e.clientX,
+        startY: e.clientY,
+        origLeft: el.offsetLeft,
+        origTop: el.offsetTop,
+      };
+      bringToFront(state);
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!dragData) return;
+      const dx = e.clientX - dragData.startX;
+      const dy = e.clientY - dragData.startY;
+      dragData.win.element.style.left = Math.max(0, dragData.origLeft + dx) + 'px';
+      dragData.win.element.style.top = Math.max(0, dragData.origTop + dy) + 'px';
+    });
+    document.addEventListener('mouseup', () => { dragData = null; });
+
+    // Resize
+    let resizeData = null;
+    state.resizeHandle.addEventListener('mousedown', (e) => {
+      if (state.isMaximized) return;
+      resizeData = {
+        win: state,
+        startX: e.clientX,
+        startY: e.clientY,
+        startW: el.offsetWidth,
+        startH: el.offsetHeight,
+      };
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!resizeData) return;
+      const dx = e.clientX - resizeData.startX;
+      const dy = e.clientY - resizeData.startY;
+      resizeData.win.element.style.width = Math.max(300, resizeData.startW + dx) + 'px';
+      resizeData.win.element.style.height = Math.max(200, resizeData.startH + dy) + 'px';
+    });
+    document.addEventListener('mouseup', () => { resizeData = null; });
+
+    // Initial size & position
+    const w = Math.min(750, window.innerWidth - 80);
+    const h = Math.min(520, window.innerHeight - 120);
+    el.style.width = w + 'px';
+    el.style.height = h + 'px';
+    el.style.left = ((window.innerWidth - w) / 2) + 'px';
+    el.style.top = ((window.innerHeight - h) / 2 - 20) + 'px';
+
+    return state;
+  }
+
+  // ─── Utility functions ──────────────────────────────────────────
+  function bringToFront(winState) {
+    winState.element.style.zIndex = ++windowZIndex;
+    winState.element.classList.remove('minimized');
+    const btn = document.querySelector(`.taskbar-btn[data-app="${winState.appId}"]`);
+    if (btn) btn.classList.remove('minimized');
+  }
+
+  function closeWindow(appId) {
+    const win = openWindows[appId];
+    if (!win) return;
+    win.element.remove();
+    delete openWindows[appId];
+    const btn = document.querySelector(`.taskbar-btn[data-app="${appId}"]`);
+    if (btn) btn.remove();
+  }
+
+  function minimizeWindow(appId) {
+    const win = openWindows[appId];
+    if (!win) return;
+    win.element.classList.add('minimized');
+    const btn = document.querySelector(`.taskbar-btn[data-app="${appId}"]`);
+    if (btn) btn.classList.add('minimized');
+  }
+
+  function toggleMaximize(winState) {
+    const el = winState.element;
+    if (winState.isMaximized) {
+      if (winState.prevRect) {
+        el.style.left = winState.prevRect.left + 'px';
+        el.style.top = winState.prevRect.top + 'px';
+        el.style.width = winState.prevRect.width + 'px';
+        el.style.height = winState.prevRect.height + 'px';
+      }
+      el.style.borderRadius = '8px';
+      winState.isMaximized = false;
+      winState.maxBtn.textContent = '☐';
+    } else {
+      winState.prevRect = {
+        left: el.offsetLeft,
+        top: el.offsetTop,
+        width: el.offsetWidth,
+        height: el.offsetHeight,
+      };
+      el.style.left = '0px';
+      el.style.top = '0px';
+      el.style.width = '100%';
+      el.style.height = '100%';
+      el.style.borderRadius = '0';
+      winState.isMaximized = true;
+      winState.maxBtn.textContent = '⧉';
+    }
+  }
+
+  function addTaskbarItem(appId, title) {
+    const btn = document.createElement('button');
+    btn.className = 'taskbar-btn';
+    btn.dataset.app = appId;
+    btn.textContent = title;
+    btn.addEventListener('click', () => {
+      const win = openWindows[appId];
+      if (!win) return;
+      if (win.element.classList.contains('minimized')) {
+        win.element.classList.remove('minimized');
+        btn.classList.remove('minimized');
+        bringToFront(win);
+      } else {
+        bringToFront(win);
+      }
+    });
+    taskbarWindows.appendChild(btn);
+  }
+
+  // Start menu
+  document.getElementById('start-btn').addEventListener('click', () => {
+    const menu = document.createElement('div');
+    menu.id = 'start-menu';
+    menu.style.cssText = `
+      position: fixed; bottom: 50px; left: 4px;
+      background: #1a1a2e; color: #eee;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 8px 0;
+      min-width: 180px;
+      z-index: 9999;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+    `;
+    for (const [id, cfg] of Object.entries(APP_CONFIG)) {
+      const item = document.createElement('div');
+      item.style.cssText = 'padding: 8px 18px; cursor: pointer; display: flex; align-items: center; gap: 10px;';
+      item.textContent = cfg.title;
+      item.addEventListener('mouseenter', () => item.style.background = '#2a2a4e');
+      item.addEventListener('mouseleave', () => item.style.background = 'transparent');
+      item.addEventListener('click', () => {
+        menu.remove();
+        openApp(id);
+      });
+      menu.appendChild(item);
+    }
+    document.body.appendChild(menu);
+    setTimeout(() => {
+      document.addEventListener('click', function closeMenu(e) {
+        if (!menu.contains(e.target) && e.target.id !== 'start-btn') {
+          menu.remove();
+          document.removeEventListener('click', closeMenu);
+        }
+      });
+    }, 10);
+  });
+
+  // Auto-open via hash (e.g. #pc)
+  if (window.location.hash) {
+    const appId = window.location.hash.replace('#', '');
+    if (APP_CONFIG[appId]) setTimeout(() => openApp(appId), 300);
+  }
+</script>
+
+</body>
+</html>

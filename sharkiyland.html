@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SharkiyLand</title>
+  <style>
+    /* ============================================================
+       SHARKIYLAND – full‑screen dark green glitch overlay
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    body {
+      background: #0e0e1a;
+      color: #ddd;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* ─── Main container ─── */
+    #gallery-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #14142a;
+      position: relative; /* needed for absolute overlay */
+      padding: 16px 20px 20px 20px;
+      overflow: hidden;
+    }
+
+    /* ─── PREVIEW AREA (main picture) ─── */
+    #preview-area {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      background: #0a0a18;
+      border-radius: 16px;
+      border: 1px solid #2a2a4a;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .preview-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  opacity 0.4s ease;
+      will-change: transform, opacity;
+    }
+
+    #current-img {
+      z-index: 2;
+      transform: scale(1);
+      opacity: 1;
+    }
+    #current-img.shrink {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+
+    #next-img {
+      z-index: 1;
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    #next-img.grow {
+      transform: scale(1);
+      opacity: 1;
+      z-index: 3;
+    }
+
+    /* ─── INFO AREA (title + description) ─── */
+    #info-area {
+      color: #bbb;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 0 6px 12px 6px;
+      min-height: 70px;
+      flex-shrink: 0;
+      position: relative; /* so text sits above glitch */
+      z-index: 5;
+    }
+    #info-area h2 {
+      color: #b3b3ff;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    #info-area p {
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    /* ─── THUMBNAILS ROW ─── */
+    #thumbnails-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 6px 0 4px 0;
+      flex-shrink: 0;
+      overflow-x: auto;
+      justify-content: center;
+      position: relative;
+      z-index: 5; /* above glitch */
+    }
+
+    .thumb-box {
+      width: 90px;
+      height: 90px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border 0.2s, transform 0.2s;
+      background: #222;
+    }
+    .thumb-box:hover {
+      border-color: #7f7fcf;
+      transform: scale(1.05);
+    }
+    .thumb-box.active {
+      border-color: #b3b3ff;
+      box-shadow: 0 0 16px rgba(100, 100, 255, 0.3);
+    }
+
+    .thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ============================================================
+       FULL‑SCREEN GLITCH OVERLAY – dark green, covers everything
+       ============================================================ */
+    #glitch-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(144, 255, 144, 0.30) 0px,   /* light green, subtle */
+    rgba(200, 255, 200, 0.12) 2px,  /* very light green */
+    rgba(100, 255, 100, 0.35) 4px,  /* medium light green */
+    rgba(180, 255, 180, 0.08) 6px,  /* pale green */
+    rgba(144, 255, 144, 0.25) 8px   /* light green again */
+  );
+  animation: glitchShift 0.3s infinite alternate;
+  z-index: 10;
+  border-radius: 0;
+}
+
+    /* dark green scanlines */
+    #glitch-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(180, 255, 180, 0.18) 0px,  /* light green scanline */
+    rgba(220, 255, 220, 0.04) 3px,  /* very faint */
+    rgba(144, 255, 144, 0.22) 6px,  /* light green line */
+    transparent 8px
+  );
+  pointer-events: none;
+}
+
+    @keyframes glitchShift {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+      25% { transform: translate(-2px, 1px) scale(1.01); opacity: 0.9; }
+      50% { transform: translate(2px, -1px) scale(0.99); opacity: 0.7; }
+      75% { transform: translate(-1px, 2px) scale(1.02); opacity: 0.95; }
+      100% { transform: translate(1px, -2px) scale(1); opacity: 0.8; }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .thumb-box {
+        width: 70px;
+        height: 70px;
+      }
+      #info-area {
+        font-size: 13px;
+        min-height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="gallery-container">
+
+  <!-- ============================================================
+       FULL‑SCREEN GLITCH OVERLAY (dark green, covers everything)
+  ============================================================ -->
+  <div id="glitch-overlay"></div>
+
+  <!-- ============================================================
+       PREVIEW AREA (main picture)
+  ============================================================ -->
+  <div id="preview-area">
+    <img id="current-img" class="preview-img"
+         src="icons/Sharkiy Land.png"
+         alt="main preview" />
+    <img id="next-img" class="preview-img"
+         src=""
+         alt="next preview" />
+  </div>
+
+  <!-- ============================================================
+       INFO AREA
+  ============================================================ -->
+  <div id="info-area">
+    <h2 id="info-title"></h2>
+    <p id="info-desc">Welcome to sharkiyLand page.Here where you will find all information about all type of $$$$$#%#%#$%. we will see you soon.</p>
+  </div>
+
+  <!-- ============================================================
+       THUMBNAILS ROW – replace src / data‑full with your own images
+  ============================================================ -->
+  <div id="thumbnails-row">
+    <div class="thumb-box active"
+         data-full="Images/Coming Soon.png"
+         data-title="coming soon"
+         data-desc="....">
+      <img src="Images/Coming Soon.png" alt="thumb1" />
+    </div>
+
+    <div class="thumb-box"
+         data-full="Images/Coming Soon.png"
+         data-title="coming soon"
+         data-desc="....">
+      <img src="Images/Coming Soon.png" alt="thumb2" />
+    </div>
+
+    <div class="thumb-box"
+         data-full="Images/Coming Soon.png"
+         data-title="coming soon"
+         data-desc="....">
+      <img src="Images/Coming Soon.png" alt="thumb3" />
+    </div>
+    <!-- ➕ Add more thumbnails here -->
+  </div>
+
+</div>
+
+<script>
+  // ============================================================
+  //  GALLERY LOGIC – click a thumbnail → animate transition
+  // ============================================================
+  const currentImg = document.getElementById('current-img');
+  const nextImg = document.getElementById('next-img');
+  const infoTitle = document.getElementById('info-title');
+  const infoDesc = document.getElementById('info-desc');
+  const thumbBoxes = document.querySelectorAll('.thumb-box');
+
+  let isAnimating = false;
+
+  thumbBoxes.forEach(box => {
+    box.addEventListener('click', function() {
+      if (isAnimating) return;
+
+      const fullSrc = this.dataset.full;
+      const title = this.dataset.title || 'Untitled';
+      const desc = this.dataset.desc || 'No description available.';
+
+      if (fullSrc === currentImg.src) {
+        thumbBoxes.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        return;
+      }
+
+      // Set next image
+      nextImg.src = fullSrc;
+
+      isAnimating = true;
+
+      thumbBoxes.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+
+      infoTitle.textContent = title;
+      infoDesc.textContent = desc;
+
+      // Animate
+      currentImg.classList.add('shrink');
+      nextImg.classList.add('grow');
+
+      const onTransitionEnd = (e) => {
+        if (e.propertyName === 'transform' || e.propertyName === 'opacity') {
+          currentImg.src = fullSrc;
+          currentImg.classList.remove('shrink');
+          nextImg.classList.remove('grow');
+          nextImg.src = '';
+          nextImg.style.zIndex = 1;
+          isAnimating = false;
+          nextImg.removeEventListener('transitionend', onTransitionEnd);
+        }
+      };
+
+      nextImg.addEventListener('transitionend', onTransitionEnd);
+    });
+  });
+
+  // Fallback if images fail to load
+  currentImg.onerror = function() {
+    this.src = 'https://via.placeholder.com/800x600/222/666?text=Image+Not+Found';
+  };
+  nextImg.onerror = function() {
+    this.src = 'https://via.placeholder.com/800x600/222/666?text=Image+Not+Found';
+  };
+</script>
+</body>
+</html>
