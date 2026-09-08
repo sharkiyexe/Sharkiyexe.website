@@ -10,14 +10,6 @@
 
 
 <div id="desktop">
-
-  <!-- ============================================================
-       DESKTOP ICONS – Edit this section to add/remove/change icons
-       Each icon: .desktop-icon
-       - data-app:   unique name (must match an entry in APP_CONFIG below)
-       - .icon-img:  path to your icon image (change src)
-       - .icon-label: text shown under the icon
-  ============================================================ -->
   <div class="desktop-icon" data-app="pc">
     <img class="icon-img" src="icons/PC.png" alt="This is your PC" />
     <span class="icon-label">This is your PC</span>
@@ -42,36 +34,26 @@
     <img class="icon-img" src="icons/My Work & Reviews.png" alt="Portfolio" />
     <span class="icon-label">My Work & Reviews</span>
   </div>
-  <!-- ============================================================
-     STARTUP SOUND – plays only once when desktop loads
-     –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
 <audio id="startup-sound" preload="auto">
-  <!-- CHANGE THE SRC TO YOUR OWN MP3 FILE -->
   <source src="sounds/startup.mp3" type="audio/mpeg" />
-  <!-- You can add other formats like .ogg if needed -->
 </audio>
 
 <script>
   (function() {
-    // ─── Config ──────────────────────────────────────────────────
-    // Change this to the path of your MP3 file
     const SOUND_FILE = "sounds/startup.mp3";
 
-    // ─── Check if we already played this sound before ──────────
     const hasPlayed = localStorage.getItem('desktop_startup_played');
 
     if (!hasPlayed) {
-      // Get the audio element
       const audio = document.getElementById('startup-sound');
       if (audio) {
         audio.volume = 0.6; // adjust volume (0.0 – 1.0)
 
-        // Try to play immediately (might be blocked by browser)
         const playPromise = audio.play();
 
         if (playPromise !== undefined) {
           playPromise.catch(() => {
-            // Autoplay blocked – wait for a click on the page
             const playOnInteraction = () => {
               audio.play().catch(() => {});
               document.removeEventListener('click', playOnInteraction);
@@ -82,19 +64,12 @@
           });
         }
 
-        // Mark as played so it never runs again
         localStorage.setItem('desktop_startup_played', 'true');
       }
     }
   })();
 </script>
-<!-- ===== END STARTUP SOUND ===== -->
 
-  <!-- ===== END DESKTOP ICONS ===== -->
-
-  <!-- ============================================================
-       TASKBAR (bottom)
-  ============================================================ -->
   <div id="taskbar">
     <div id="start-btn">🪟</div>
     <div id="taskbar-windows"></div>
@@ -103,18 +78,9 @@
 
 </div>
 
-<!-- ============================================================
-     JAVASCRIPT – Window Manager & Desktop logic
-     –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
 <script>
-  // ────────────────────────────────────────────────────────────────
-  //   APP CONFIG – Edit this to add/remove apps
-  //   Each app: { id, title, url, icon }
-  //   - id:    unique identifier (matches data-app on icon)
-  //   - title: shown in window title bar
-  //   - url:   path to the app's HTML file
-  //   - icon:  (optional) icon shown in taskbar
-  // ────────────────────────────────────────────────────────────────
+ 
   const APP_CONFIG = {
     pc: {
       id: 'pc',

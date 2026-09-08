@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Starting Windows...</title>
   <style>
-    /* ============================================================
-       BOOT SCREEN – Windows XP style (image + loading bar)
-       –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+  
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      background: #0a0a2a; /* classic dark blue */
+      background: #0a0a2a; 
       color: #fff;
       font-family: 'Segoe UI', Tahoma, sans-serif;
       height: 100vh;
@@ -35,19 +33,15 @@
       align-items: center;
     }
 
-    /* ============================================================
-       IMAGE / LOGO – put your own image here
-       –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+    */
     #boot-logo {
       width: 100%;
       max-width: 400px;
       height: auto;
       margin-bottom: 40px;
       filter: drop-shadow(0 0 30px rgba(100, 100, 255, 0.3));
-      /* Replace the src below with your own image path */
     }
 
-    /* Loading bar – XP green style */
     #loading-bar-bg {
       width: 100%;
       max-width: 480px;
@@ -87,20 +81,14 @@
       font-size: 12px;
       color: #666;
       opacity: 0.5;
-      display: none; /* hidden by default, shown if audio needs user interaction */
+      display: none; 
     }
   </style>
 </head>
 <body>
 
 <div id="boot-container">
-  <!-- ============================================================
-       IMAGE – replace 'xp-logo.png' with your own image file
-       Supported formats: PNG, JPG, GIF, SVG, etc.
-       Place the image in the same folder as this HTML file,
-       or use a subfolder like 'images/logo.png'
-  ============================================================ -->
-  <img id="boot-logo" src="xp-logo.png" alt="Windows XP" />
+  <img id="boot-logo" src="icons/Sharkiy Land.png" alt="SharkiyLand" />
 
   <!-- Loading bar -->
   <div id="loading-bar-bg">
@@ -111,19 +99,13 @@
 </div>
 
 <audio id="boot-sound" loop>
-  <!-- ============================================================
-        I fucked up when adding the audio and i dont wanna remove so i dont redo all code again.
-  ============================================================ -->
   <source src="/startup.mp3" type="audio/mpeg" />
   <source src="/startup.ogg" type="audio/ogg" />
 </audio>
 
 <script>
   (function() {
-    // ──────────────────────────────────────────────────────────────
-    //  CONFIG – duration in seconds before redirect
-    // ──────────────────────────────────────────────────────────────
-    const BOOT_DURATION = 10; // seconds
+    const BOOT_DURATION = 5; // seconds
 
     const progressBar = document.getElementById('loading-bar');
     const loadingText = document.getElementById('loading-text');
@@ -172,10 +154,6 @@
       } else {
         loadingText.textContent = 'Welcome!';
         setTimeout(function() {
-          // ──────────────────────────────────────────────────────────
-          //  REDIRECT – change 'desktop.html' to your desktop file
-          //  If your desktop is 'index.html', change it below.
-          // ──────────────────────────────────────────────────────────
           window.location.href = 'desktop.html';
         }, 500);
       }
@@ -183,7 +161,6 @@
 
     updateProgress();
 
-    // ─── Fallback redirect after BOOT_DURATION + 1 sec ──────────
     setTimeout(function() {
       if (window.location.pathname.includes('boot.html')) {
         window.location.href = 'desktop.html';
