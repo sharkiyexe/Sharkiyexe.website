@@ -1,5 +1,5 @@
 /* ============================================================
-   RESPONSIVE DESKTOP – works on PC & phone
+   DESKTOP – PC version (original, unchanged)
    ============================================================ */
 * {
   margin: 0;
@@ -26,7 +26,7 @@ html, body {
 }
 
 /* ============================================================
-   DESKTOP ICONS – responsive with vw units
+   DESKTOP ICONS – PC version (fixed pixel values)
    ============================================================ */
 .desktop-icon {
   position: absolute;
@@ -34,9 +34,8 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 10vw;          /* relative to viewport width */
-  max-width: 80px;
-  padding: 0.6vw 0.3vw;
+  width: 80px;
+  padding: 8px 4px;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
@@ -50,62 +49,58 @@ html, body {
   transform: scale(0.92);
 }
 
-/* Position each icon using vw so they scale */
-.desktop-icon:nth-child(1) { top: 4vh; left: 4vw; }    /* PC */
-.desktop-icon:nth-child(2) { top: 4vh; left: 18vw; }   /* SharkiyLand */
-.desktop-icon:nth-child(3) { top: 4vh; left: 32vw; }   /* News */
-.desktop-icon:nth-child(4) { top: 4vh; left: 46vw; }   /* About */
-.desktop-icon:nth-child(5) { top: 4vh; left: 60vw; }   /* Portfolio */
+/* PC positions (unchanged from your original) */
+.desktop-icon:nth-child(1) { top: 30px; left: 30px; }    /* PC */
+.desktop-icon:nth-child(2) { top: 30px; left: 140px; }   /* SharkiyLand */
+.desktop-icon:nth-child(3) { top: 30px; left: 250px; }   /* News */
+.desktop-icon:nth-child(4) { top: 30px; left: 360px; }   /* About */
+.desktop-icon:nth-child(5) { top: 30px; left: 470px; }   /* Portfolio */
 
 .icon-img {
-  width: 6vw;           /* icon size scales */
-  max-width: 56px;
-  height: 6vw;
-  max-height: 56px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
   pointer-events: none;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
 }
 .icon-label {
-  font-size: 1.2vw;    /* text size scales */
-  max-font-size: 14px;
+  font-size: 12px;
   text-align: center;
-  margin-top: 0.6vw;
+  margin-top: 6px;
   line-height: 1.3;
-  max-width: 10vw;
+  max-width: 72px;
   word-wrap: break-word;
   background: rgba(0,0,0,0.4);
-  padding: 0.2vw 0.6vw;
+  padding: 2px 6px;
   border-radius: 10px;
   backdrop-filter: blur(2px);
 }
 
 /* ============================================================
-   TASKBAR – responsive
+   TASKBAR – PC version
    ============================================================ */
 #taskbar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 6vh;          /* relative to viewport height */
-  min-height: 40px;
+  height: 48px;
   background: rgba(20, 20, 40, 0.85);
   backdrop-filter: blur(8px);
   border-top: 1px solid #444;
   display: flex;
   align-items: center;
-  padding: 0 1vw;
-  gap: 0.6vw;
+  padding: 0 10px;
+  gap: 6px;
   color: #ddd;
-  font-size: 1.2vw;
+  font-size: 14px;
   z-index: 999;
 }
 
 #start-btn {
-  font-size: 2.5vw;
+  font-size: 22px;
   cursor: pointer;
-  padding: 0.4vw 1vw;
+  padding: 4px 10px;
   border-radius: 4px;
   transition: background 0.2s;
 }
@@ -117,22 +112,22 @@ html, body {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 0.4vw;
+  gap: 4px;
   overflow-x: auto;
-  padding: 0 0.6vw;
+  padding: 0 6px;
 }
 
 .taskbar-btn {
   background: rgba(255,255,255,0.08);
   border: 1px solid transparent;
   color: #ddd;
-  padding: 0.4vw 1.2vw;
+  padding: 4px 14px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1vw;
+  font-size: 13px;
   white-space: nowrap;
   transition: background 0.2s, border 0.2s;
-  min-width: 5vw;
+  min-width: 60px;
   text-align: center;
 }
 .taskbar-btn:hover {
@@ -145,19 +140,17 @@ html, body {
 }
 
 #clock {
-  font-size: 1.2vw;
-  padding: 0 1vw;
+  font-size: 14px;
+  padding: 0 12px;
   color: #ccc;
   border-left: 1px solid #444;
 }
 
-/* ============================================================
-   WINDOWS – responsive
-   ============================================================ */
+
 .window {
   position: absolute;
-  min-width: 40vw;
-  min-height: 30vh;
+  min-width: 300px;
+  min-height: 200px;
   background: #1e1e32;
   border: 1px solid #3a3a5a;
   border-radius: 10px;
@@ -176,7 +169,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   background: #2a2a4a;
-  padding: 0.6vh 1vw;
+  padding: 6px 12px;
   cursor: grab;
   border-bottom: 1px solid #444;
   flex-shrink: 0;
@@ -185,7 +178,7 @@ html, body {
   cursor: grabbing;
 }
 .window-title {
-  font-size: 1.2vw;
+  font-size: 14px;
   font-weight: 500;
   color: #eee;
   overflow: hidden;
@@ -196,19 +189,17 @@ html, body {
 
 .window-controls {
   display: flex;
-  gap: 0.4vw;
-  margin-left: 1vw;
+  gap: 6px;
+  margin-left: 12px;
 }
 .win-btn {
   background: transparent;
   border: none;
   color: #ccc;
-  width: 2vw;
-  height: 2vw;
-  min-width: 20px;
-  min-height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 4px;
-  font-size: 1.2vw;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
   display: flex;
@@ -248,35 +239,30 @@ html, body {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 1.5vw;
-  height: 1.5vw;
+  width: 16px;
+  height: 16px;
   cursor: nwse-resize;
   background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.15) 50%);
   border-bottom-right-radius: 10px;
 }
 
-/* ============================================================
-   START MENU (popup) – responsive
-   ============================================================ */
+
 #start-menu {
   position: fixed;
-  bottom: 7vh;
-  left: 1vw;
+  bottom: 50px;
+  left: 4px;
   background: #1a1a2e;
   color: #eee;
   border: 1px solid #444;
   border-radius: 8px;
-  padding: 0.6vw 0;
-  min-width: 20vw;
+  padding: 8px 0;
+  min-width: 180px;
   z-index: 9999;
   box-shadow: 0 8px 30px rgba(0,0,0,0.8);
-  font-size: 1.2vw;
 }
 
-/* ============================================================
-   MEDIA QUERY – extra tweaks for very small phones
-   ============================================================ */
-@media (max-width: 480px) {
+
+@media (max-width: 768px) {
   .desktop-icon {
     width: 16vw;
     padding: 1vw 0.5vw;
@@ -310,6 +296,10 @@ html, body {
   #clock {
     font-size: 2.5vw;
   }
+  .window {
+    min-width: 70vw;
+    min-height: 40vh;
+  }
   .window-title {
     font-size: 2.5vw;
   }
@@ -319,10 +309,6 @@ html, body {
     font-size: 2.5vw;
     min-width: 28px;
     min-height: 28px;
-  }
-  .window {
-    min-width: 70vw;
-    min-height: 40vh;
   }
   #start-menu {
     font-size: 2.5vw;
