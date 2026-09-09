@@ -116,7 +116,6 @@
     function enableAudioAndStart() {
       audio.volume = 0.6;
       audio.play().catch(() => {
-        // If still blocked, keep hint visible
         clickHint.style.display = 'block';
       });
       // Remove listener after first click

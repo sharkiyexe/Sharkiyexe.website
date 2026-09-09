@@ -1,6 +1,6 @@
 /* ============================================================
-   GLOBAL RESET & DESKTOP BACKGROUND
-   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+   RESPONSIVE DESKTOP – works on PC & phone
+   ============================================================ */
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +13,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: #1a1a2e; /* fallback */
+  background: #1a1a2e;
 }
 
 #desktop {
@@ -26,18 +26,17 @@ html, body {
 }
 
 /* ============================================================
-   DESKTOP ICONS
-   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+   DESKTOP ICONS – responsive with vw units
+   ============================================================ */
 .desktop-icon {
   position: absolute;
-  top: 30px;
-  left: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  padding: 8px 4px;
+  width: 10vw;          /* relative to viewport width */
+  max-width: 80px;
+  padding: 0.6vw 0.3vw;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
@@ -51,58 +50,62 @@ html, body {
   transform: scale(0.92);
 }
 
-/* Position each icon manually (or use grid, but we want PC‑like freedom) */
-.desktop-icon:nth-child(1) { top: 30px; left: 30px; }   /* PC */
-.desktop-icon:nth-child(2) { top: 30px; left: 140px; }  /* SharkiyLand */
-.desktop-icon:nth-child(3) { top: 30px; left: 250px; }  /* News */
-.desktop-icon:nth-child(4) { top: 30px; left: 360px; }  /* About */
-.desktop-icon:nth-child(5) { top: 30px; left: 470px; }  /* Portfolio */
+/* Position each icon using vw so they scale */
+.desktop-icon:nth-child(1) { top: 4vh; left: 4vw; }    /* PC */
+.desktop-icon:nth-child(2) { top: 4vh; left: 18vw; }   /* SharkiyLand */
+.desktop-icon:nth-child(3) { top: 4vh; left: 32vw; }   /* News */
+.desktop-icon:nth-child(4) { top: 4vh; left: 46vw; }   /* About */
+.desktop-icon:nth-child(5) { top: 4vh; left: 60vw; }   /* Portfolio */
 
 .icon-img {
-  width: 56px;
-  height: 56px;
+  width: 6vw;           /* icon size scales */
+  max-width: 56px;
+  height: 6vw;
+  max-height: 56px;
   object-fit: contain;
   pointer-events: none;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
 }
 .icon-label {
-  font-size: 12px;
+  font-size: 1.2vw;    /* text size scales */
+  max-font-size: 14px;
   text-align: center;
-  margin-top: 6px;
+  margin-top: 0.6vw;
   line-height: 1.3;
-  max-width: 72px;
+  max-width: 10vw;
   word-wrap: break-word;
   background: rgba(0,0,0,0.4);
-  padding: 2px 6px;
+  padding: 0.2vw 0.6vw;
   border-radius: 10px;
   backdrop-filter: blur(2px);
 }
 
 /* ============================================================
-   TASKBAR
-   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+   TASKBAR – responsive
+   ============================================================ */
 #taskbar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 48px;
+  height: 6vh;          /* relative to viewport height */
+  min-height: 40px;
   background: rgba(20, 20, 40, 0.85);
   backdrop-filter: blur(8px);
   border-top: 1px solid #444;
   display: flex;
   align-items: center;
-  padding: 0 10px;
-  gap: 6px;
+  padding: 0 1vw;
+  gap: 0.6vw;
   color: #ddd;
-  font-size: 14px;
+  font-size: 1.2vw;
   z-index: 999;
 }
 
 #start-btn {
-  font-size: 22px;
+  font-size: 2.5vw;
   cursor: pointer;
-  padding: 4px 10px;
+  padding: 0.4vw 1vw;
   border-radius: 4px;
   transition: background 0.2s;
 }
@@ -114,22 +117,22 @@ html, body {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.4vw;
   overflow-x: auto;
-  padding: 0 6px;
+  padding: 0 0.6vw;
 }
 
 .taskbar-btn {
   background: rgba(255,255,255,0.08);
   border: 1px solid transparent;
   color: #ddd;
-  padding: 4px 14px;
+  padding: 0.4vw 1.2vw;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 1vw;
   white-space: nowrap;
   transition: background 0.2s, border 0.2s;
-  min-width: 60px;
+  min-width: 5vw;
   text-align: center;
 }
 .taskbar-btn:hover {
@@ -142,19 +145,19 @@ html, body {
 }
 
 #clock {
-  font-size: 14px;
-  padding: 0 12px;
+  font-size: 1.2vw;
+  padding: 0 1vw;
   color: #ccc;
   border-left: 1px solid #444;
 }
 
 /* ============================================================
-   WINDOWS
-   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+   WINDOWS – responsive
+   ============================================================ */
 .window {
   position: absolute;
-  min-width: 300px;
-  min-height: 200px;
+  min-width: 40vw;
+  min-height: 30vh;
   background: #1e1e32;
   border: 1px solid #3a3a5a;
   border-radius: 10px;
@@ -173,7 +176,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   background: #2a2a4a;
-  padding: 6px 12px;
+  padding: 0.6vh 1vw;
   cursor: grab;
   border-bottom: 1px solid #444;
   flex-shrink: 0;
@@ -182,7 +185,7 @@ html, body {
   cursor: grabbing;
 }
 .window-title {
-  font-size: 14px;
+  font-size: 1.2vw;
   font-weight: 500;
   color: #eee;
   overflow: hidden;
@@ -193,17 +196,19 @@ html, body {
 
 .window-controls {
   display: flex;
-  gap: 6px;
-  margin-left: 12px;
+  gap: 0.4vw;
+  margin-left: 1vw;
 }
 .win-btn {
   background: transparent;
   border: none;
   color: #ccc;
-  width: 24px;
-  height: 24px;
+  width: 2vw;
+  height: 2vw;
+  min-width: 20px;
+  min-height: 20px;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 1.2vw;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
   display: flex;
@@ -243,26 +248,84 @@ html, body {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 16px;
-  height: 16px;
+  width: 1.5vw;
+  height: 1.5vw;
   cursor: nwse-resize;
   background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.15) 50%);
   border-bottom-right-radius: 10px;
 }
 
 /* ============================================================
-   START MENU (popup)
-   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+   START MENU (popup) – responsive
+   ============================================================ */
 #start-menu {
   position: fixed;
-  bottom: 50px;
-  left: 4px;
+  bottom: 7vh;
+  left: 1vw;
   background: #1a1a2e;
   color: #eee;
   border: 1px solid #444;
   border-radius: 8px;
-  padding: 8px 0;
-  min-width: 180px;
+  padding: 0.6vw 0;
+  min-width: 20vw;
   z-index: 9999;
   box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+  font-size: 1.2vw;
+}
+
+/* ============================================================
+   MEDIA QUERY – extra tweaks for very small phones
+   ============================================================ */
+@media (max-width: 480px) {
+  .desktop-icon {
+    width: 16vw;
+    padding: 1vw 0.5vw;
+  }
+  .desktop-icon:nth-child(1) { top: 3vh; left: 4vw; }
+  .desktop-icon:nth-child(2) { top: 3vh; left: 24vw; }
+  .desktop-icon:nth-child(3) { top: 3vh; left: 44vw; }
+  .desktop-icon:nth-child(4) { top: 3vh; left: 64vw; }
+  .desktop-icon:nth-child(5) { top: 3vh; left: 84vw; }
+  .icon-img {
+    width: 12vw;
+    height: 12vw;
+  }
+  .icon-label {
+    font-size: 2.5vw;
+    max-width: 16vw;
+    margin-top: 1vw;
+  }
+  #taskbar {
+    height: 8vh;
+    font-size: 2.5vw;
+  }
+  #start-btn {
+    font-size: 4vw;
+  }
+  .taskbar-btn {
+    font-size: 2.2vw;
+    padding: 0.6vw 2vw;
+    min-width: 10vw;
+  }
+  #clock {
+    font-size: 2.5vw;
+  }
+  .window-title {
+    font-size: 2.5vw;
+  }
+  .win-btn {
+    width: 4vw;
+    height: 4vw;
+    font-size: 2.5vw;
+    min-width: 28px;
+    min-height: 28px;
+  }
+  .window {
+    min-width: 70vw;
+    min-height: 40vh;
+  }
+  #start-menu {
+    font-size: 2.5vw;
+    min-width: 40vw;
+  }
 }

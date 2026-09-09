@@ -113,19 +113,15 @@
     icon: 'icons/Portfolio.png'   
   }
   };
-  // ────────────────────────────────────────────────────────────────
 
-  // State
   const openWindows = {};
   let windowZIndex = 100;
   let nextWindowId = 0;
 
-  // DOM refs
   const desktop = document.getElementById('desktop');
   const taskbarWindows = document.getElementById('taskbar-windows');
   const clockEl = document.getElementById('clock');
 
-  // ─── Clock ──────────────────────────────────────────────────────
   function updateClock() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, '0');
@@ -135,15 +131,48 @@
   updateClock();
   setInterval(updateClock, 10000);
 
-  // ─── Icon click handler ────────────────────────────────────────
-  document.querySelectorAll('.desktop-icon').forEach(iconEl => {
-    iconEl.addEventListener('dblclick', () => {
+document.querySelectorAll('.desktop-icon').forEach(iconEl => {
+  let isDragging = false;
+
+  // Detect drag so we don't open the app while dragging
+  iconEl.addEventListener('mousedown', () => {
+    isDragging = false;
+  });
+
+  iconEl.addEventListener('mousemove', () => {
+    isDragging = true;
+  });
+
+  iconEl.addEventListener('mouseup', (e) => {
+    // Only open if it was a click, not a drag
+    if (!isDragging) {
       const appId = iconEl.dataset.app;
       if (appId && APP_CONFIG[appId]) {
         openApp(appId);
       }
-    });
+    }
+    isDragging = false;
   });
+
+  // Also support touch devices (mobile/tablet)
+  iconEl.addEventListener('touchstart', () => {
+    isDragging = false;
+  });
+
+  iconEl.addEventListener('touchmove', () => {
+    isDragging = true;
+  });
+
+  iconEl.addEventListener('touchend', (e) => {
+    if (!isDragging) {
+      const appId = iconEl.dataset.app;
+      if (appId && APP_CONFIG[appId]) {
+        openApp(appId);
+      }
+    }
+    isDragging = false;
+  });
+});
 
   // ─── Open an app (creates a window) ───────────────────────────
   function openApp(appId) {
