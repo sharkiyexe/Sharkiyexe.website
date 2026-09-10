@@ -1,6 +1,6 @@
 /* ============================================================
-   DESKTOP – PC version (original, unchanged)
-   ============================================================ */
+   GLOBAL RESET
+============================================================ */
 * {
   margin: 0;
   padding: 0;
@@ -16,18 +16,22 @@ html, body {
   background: #1a1a2e;
 }
 
+/* ============================================================
+   DESKTOP BACKGROUND
+   – To change wallpaper: edit the url() below
+============================================================ */
 #desktop {
   width: 100vw;
   height: 100vh;
-  background: url('images/Pc\ backgroud\ image.png') no-repeat center center fixed;
+  background: url('images/Pc backgroud image.png') no-repeat center center fixed;
   background-size: cover;
   position: relative;
   overflow: hidden;
 }
 
 /* ============================================================
-   DESKTOP ICONS – PC version (fixed pixel values)
-   ============================================================ */
+   DESKTOP ICONS – PC version
+============================================================ */
 .desktop-icon {
   position: absolute;
   display: flex;
@@ -49,7 +53,6 @@ html, body {
   transform: scale(0.92);
 }
 
-/* PC positions (unchanged from your original) */
 .desktop-icon:nth-child(1) { top: 30px; left: 30px; }    /* PC */
 .desktop-icon:nth-child(2) { top: 30px; left: 140px; }   /* SharkiyLand */
 .desktop-icon:nth-child(3) { top: 30px; left: 250px; }   /* News */
@@ -77,76 +80,220 @@ html, body {
 }
 
 /* ============================================================
-   TASKBAR – PC version
-   ============================================================ */
+   WINDOWS XP TASKBAR
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– 
+   To change the taskbar background image:
+   → set --taskbar-bg to  url('your-image.png')
+   To change the start button image:
+   → set --start-btn-bg to url('your-image.png')
+============================================================ */
+
+:root {
+  /* ── EDIT THESE to change the taskbar & start button ── */
+  --taskbar-bg: linear-gradient(to bottom, #245edb 0%, #3f8cf3 4%, #245edb 10%, #1941a5 100%);
+  /* Example with image:  --taskbar-bg: url('images/xp-taskbar.png') repeat-x; */
+  --taskbar-height: 44px;
+
+  --start-btn-bg: linear-gradient(to bottom, #3c9d3c 0%, #2d8b2d 50%, #1a691a 100%);
+  /* Example with image:  --start-btn-bg: url('images/xp-start-btn.png') no-repeat center / 100% 100%; */
+
+  --tray-bg: linear-gradient(to bottom, #1290e9 0%, #0a5fbf 50%, #083a8a 100%);
+}
+
 #taskbar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 48px;
-  background: rgba(20, 20, 40, 0.85);
-  backdrop-filter: blur(8px);
-  border-top: 1px solid #444;
+  height: var(--taskbar-height);
+  background: var(--taskbar-bg);
+  background-size: auto 100%;
+  border-top: 1px solid #4a8bff;
+  box-shadow: 0 -1px 0 rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.25);
   display: flex;
   align-items: center;
-  padding: 0 10px;
-  gap: 6px;
-  color: #ddd;
-  font-size: 14px;
+  padding: 0 4px 0 0;
+  gap: 4px;
+  color: #fff;
+  font-family: 'Tahoma', 'Segoe UI', sans-serif;
+  font-size: 12px;
   z-index: 999;
 }
 
+/* ── START BUTTON ── */
 #start-btn {
-  font-size: 22px;
+  height: 100%;
+  padding: 0 16px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   cursor: pointer;
-  padding: 4px 10px;
-  border-radius: 4px;
-  transition: background 0.2s;
+  background: var(--start-btn-bg);
+  background-size: 100% 100%;
+  border-right: 1px solid #0a3a0a;
+  border-radius: 0 12px 12px 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset -2px 0 4px rgba(0,0,0,0.2);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+  transition: filter 0.15s;
+  user-select: none;
 }
-#start-btn:hover {
-  background: rgba(255,255,255,0.15);
+#start-btn:hover { filter: brightness(1.12); }
+#start-btn:active { filter: brightness(0.9); }
+
+#start-icon-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+}
+#start-text {
+  display: inline;
 }
 
+/* ── QUICK LAUNCH ── */
+#quick-launch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  height: 100%;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  border-left: 1px solid rgba(0,0,0,0.3);
+}
+.quick-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.quick-icon:hover { background: rgba(255,255,255,0.15); }
+.quick-icon img { width: 16px; height: 16px; object-fit: contain; }
+
+/* ── OPEN WINDOW BUTTONS ── */
 #taskbar-windows {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 4px;
-  overflow-x: auto;
-  padding: 0 6px;
+  gap: 3px;
+  overflow: hidden;
+  padding: 0 4px;
 }
 
 .taskbar-btn {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid transparent;
-  color: #ddd;
-  padding: 4px 14px;
-  border-radius: 4px;
+  min-width: 140px;
+  max-width: 180px;
+  height: 28px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(to bottom, #3f8cf3 0%, #245edb 50%, #1941a5 100%);
+  border: 1px solid #0d2f7a;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 11px;
   cursor: pointer;
-  font-size: 13px;
   white-space: nowrap;
-  transition: background 0.2s, border 0.2s;
-  min-width: 60px;
-  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+  transition: filter 0.15s;
 }
-.taskbar-btn:hover {
-  background: rgba(255,255,255,0.18);
-}
+.taskbar-btn:hover { filter: brightness(1.15); }
 .taskbar-btn.minimized {
-  background: rgba(255,255,255,0.04);
-  border-color: #555;
-  color: #999;
+  background: linear-gradient(to bottom, #6a9be0 0%, #3f6db0 50%, #2a4d85 100%);
+  color: #d0e0ff;
+  font-style: italic;
 }
+.taskbar-btn.active {
+  background: linear-gradient(to bottom, #1941a5 0%, #245edb 50%, #3f8cf3 100%);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/* ── SYSTEM TRAY ── */
+#system-tray {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px 0 8px;
+  background: var(--tray-bg);
+  background-size: 100% 100%;
+  border-left: 1px solid #0a4a9a;
+  box-shadow: inset 1px 0 0 rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 11px;
+}
+
+#volume-icon {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: background 0.15s;
+}
+#volume-icon:hover { background: rgba(255,255,255,0.15); }
 
 #clock {
-  font-size: 14px;
-  padding: 0 12px;
-  color: #ccc;
-  border-left: 1px solid #444;
+  font-size: 11px;
+  padding: 0 4px;
+  color: #fff;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+  min-width: 46px;
+  text-align: center;
 }
 
+/* ── VOLUME POPUP ── */
+#volume-popup {
+  display: none;
+  position: fixed;
+  bottom: 54px;
+  right: 12px;
+  width: 70px;
+  background: #ece9d8;
+  border: 2px solid #0a246a;
+  border-radius: 6px;
+  padding: 10px 8px;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.6);
+  z-index: 10000;
+  text-align: center;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 11px;
+  color: #000;
+}
+#volume-popup.show { display: block; }
+#volume-label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #0a246a;
+}
+#volume-slider {
+  writing-mode: bt-lr;
+  -webkit-appearance: slider-vertical;
+  width: 24px;
+  height: 100px;
+  margin: 4px 0;
+  accent-color: #245edb;
+  cursor: pointer;
+}
+#volume-percent {
+  margin-top: 4px;
+  font-weight: bold;
+  color: #0a246a;
+}
 
+/* ============================================================
+   WINDOWS
+============================================================ */
 .window {
   position: absolute;
   min-width: 300px;
@@ -246,22 +393,9 @@ html, body {
   border-bottom-right-radius: 10px;
 }
 
-
-#start-menu {
-  position: fixed;
-  bottom: 50px;
-  left: 4px;
-  background: #1a1a2e;
-  color: #eee;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 8px 0;
-  min-width: 180px;
-  z-index: 9999;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.8);
-}
-
-
+/* ============================================================
+   📱 PHONE ONLY – scales everything down for small screens
+============================================================ */
 @media (max-width: 768px) {
   .desktop-icon {
     width: 16vw;
@@ -287,11 +421,17 @@ html, body {
   }
   #start-btn {
     font-size: 4vw;
+    padding: 0 3vw 0 1.5vw;
+  }
+  #start-icon-img {
+    width: 5vw;
+    height: 5vw;
   }
   .taskbar-btn {
     font-size: 2.2vw;
     padding: 0.6vw 2vw;
     min-width: 10vw;
+    height: 6vh;
   }
   #clock {
     font-size: 2.5vw;
