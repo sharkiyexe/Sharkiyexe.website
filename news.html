@@ -79,6 +79,28 @@
       border-left-color: #b3b3ff;
       background: #1e1e38;
     }
+
+    /* ============================================================
+       🖼️ IMAGE SUPPORT (NEW)
+       – Add <img src="..."> inside the `full:` field to show images
+       ============================================================ */
+    .full-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 12px 0;
+      display: block;
+      border: 1px solid #3a3a5a;
+    }
+    /* Optional caption under an image */
+    .full-content .caption {
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+      margin-top: -6px;
+      margin-bottom: 14px;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -88,20 +110,41 @@
 </div>
 
 <script>
+  // ============================================================
+  //  NEWS DATA – add, remove, or edit entries here
+  //  ─────────────────────────────────────────────────────────
+  //  Each item: { title, date, summary, full }
+  //
+  //  🖼️ TO ADD AN IMAGE:
+  //     Inside the `full:` field, use HTML like this:
+  //
+  //     full: `
+  //       <p>Your text here.</p>
+  //       <img src="images/news/your-image.png" alt="description" />
+  //       <div class="caption">Optional caption under the image</div>
+  //       <p>More text after.</p>
+  //     `
+  //
+  //     (Use backticks ` ` instead of quotes " " when you include HTML)
+  // ============================================================
   const newsData = [
     {
       title: "Hot fixes for website #2",
       date: "sept 10, 2026",
       summary: "I fix the [] icon",
-      full: "the [] icon is now fixed and it should work now like it should. the icon was making multiple taps overlap and never close then clicking on it again. but now its fixed.",
-    }, 
-  {
+      full: `
+        <p>the [] icon is now fixed and it should work now like it should. the icon was making multiple taps overlap and never close then clicking on it again. but now its fixed."</p>
+        <img src="images/haru.gif" alt="description" />
+        <div class="caption"></div>
+      `,
+    },
+    {
       title: "Hot fixes for website",
       date: "sept 9, 2026",
       summary: "I fix the phone and clicking problems",
       full: "So I had an idea that I should make the website duoble click to open the apps and others. but it end up being confusing for some people so I change it back to 1 click to open the apps. I also fix when open website from phone it don't hopefully zoom in the website. that it thank you all! <3",
-    }, 
-  {
+    },
+    {
       title: "SharkiyLand 2.0 webiste is now done!",
       date: "sept 8, 2026",
       summary: "The wesbite is now DONE!",
